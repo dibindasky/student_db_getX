@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:student_getx/controller/validator_functions.dart';
+import 'package:student_getx/controller/functions/validator_functions.dart';
 
 import '../../../core/constants.dart';
 

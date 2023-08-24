@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:student_getx/controller/db_functions.dart';
 import 'package:student_getx/core/constants.dart';
 import 'package:student_getx/view/screens/screen_add_edit.dart';
 import 'package:student_getx/view/widgets/circle_avathar.dart';
@@ -7,13 +6,11 @@ import 'package:student_getx/view/widgets/circle_avathar.dart';
 import '../../../model/student_model.dart';
 import 'profile_tile.dart';
 
-
 class ListStudentTile extends StatelessWidget {
   ListStudentTile({super.key, required this.size, required this.model});
 
   final Size size;
   final Student model;
-  final Sql sql = Sql();
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +42,12 @@ class ListStudentTile extends StatelessWidget {
                           model: model,
                         ),
                       ));
-                      setData(model);
+                  setData(model);
                 },
                 icon: const Icon(Icons.edit_document)),
             IconButton(
                 onPressed: () async {
-                  await sql.deleteData(model.id!);
+                  // await sql.deleteData(model.id!);
                 },
                 icon: const Icon(Icons.delete_forever_outlined))
           ]),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:student_getx/controller/db_functions.dart';
+import 'package:get/get.dart';
 import 'package:student_getx/core/constants.dart';
 import 'package:student_getx/view/screens/screen_add_edit.dart';
 
+import '../../controller/getx/student_list_controller.dart';
 import '../../model/student_model.dart';
 import '../widgets/home/list_tile.dart';
 import '../widgets/home/search_textfield.dart';
@@ -10,13 +11,17 @@ import '../widgets/home/search_textfield.dart';
 ValueNotifier<bool> search = ValueNotifier(false);
 String srarchValue = '';
 
-class ScreenHome extends StatelessWidget {
+class ScreenHome extends GetView {
   ScreenHome({super.key});
 
   final TextEditingController searchController = TextEditingController();
+  final listController = Get.put<StudentListController>(StudentListController());
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPersistentFrameCallback((timeStamp) async{
+      await listController.getStudents('');
+    });
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: kwhite,
@@ -29,21 +34,26 @@ class ScreenHome extends StatelessWidget {
             centerTitle: true,
             title: const Text('Students Data'),
             bottom: AppBar(
-              title: SearchBarText(size: size, searchController: searchController),
+              title:
+                  SearchBarText(size: size, searchController: searchController),
             ),
           ),
           // Other Sliver Widgets
           SliverList(
             delegate: SliverChildListDelegate([
-              ValueListenableBuilder(
-                valueListenable: studentListNotifier,
-                builder: (context, students, _) {
+              GetX<StudentListController>(
+                builder: (listController) {
                   return ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: students.length,
+                    itemCount: listController.studentList.length,
                     itemBuilder: (context, index) {
-                      final Student model = students[index];
+                      if (listController.studentList.isEmpty) {
+                        return const Center(
+                          child: Text('list is empty'),
+                        );
+                      }
+                      final Student model = listController.studentList[index];
                       return ListStudentTile(
                         size: size,
                         model: model,
@@ -72,4 +82,3 @@ class ScreenHome extends StatelessWidget {
     );
   }
 }
-

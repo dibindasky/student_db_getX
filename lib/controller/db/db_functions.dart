@@ -39,16 +39,16 @@ class Sql with ChangeNotifier {
     return true;
   }
 
-  Future<void> getData() async {
+  Future<List<Student>> getData() async {
+    List<Student> studentList = [];
     List<Map<String, Object?>> list =
         await db.rawQuery('SELECT * FROM Student');
-    studentListNotifier.value.clear();
     for (var map in list) {
-      studentListNotifier.value.add(Student.fromMap(map));
-      print(studentListNotifier.value.last.name);
+      final student = Student.fromMap(map);
+      print(student.name);
+      studentList.add(student);
     }
-    studentListNotifier.notifyListeners();
-    print(studentListNotifier.value);
+    return studentList;
   }
 
   Future<bool> updateTable(Student model) async {

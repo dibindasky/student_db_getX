@@ -2,12 +2,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:student_getx/controller/db_functions.dart';
-import 'package:student_getx/controller/validator_functions.dart';
+import 'package:student_getx/controller/db/db_functions.dart';
+import 'package:student_getx/controller/functions/validator_functions.dart';
 import 'package:student_getx/core/constants.dart';
 import 'package:student_getx/model/student_model.dart';
 
+import '../../controller/getx/student_list_controller.dart';
 import '../widgets/circle_avathar.dart';
 import '../widgets/add_edit/text_field.dart';
 
@@ -28,6 +30,7 @@ class ScreenDetails extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
   final Sql sql = Sql();
   final Student? model;
+  final listController = Get.put(StudentListController());
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +86,7 @@ class ScreenDetails extends StatelessWidget {
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
                         await checkStudent();
+                        await listController.getStudents('');
                         Navigator.pop(context);
                       }
                     },

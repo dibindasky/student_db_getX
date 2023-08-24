@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:student_getx/controller/db_functions.dart';
+import 'package:student_getx/controller/db/db_functions.dart';
 import 'package:student_getx/core/constants.dart';
 import 'package:student_getx/view/screens/screen_home.dart';
+
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
