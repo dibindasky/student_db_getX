@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:student_getx/controller/db/db_functions.dart';
 import 'package:student_getx/core/constants.dart';
 import 'package:student_getx/view/screens/screen_home.dart';
@@ -17,7 +18,7 @@ class StudentApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       theme: ThemeData(
           canvasColor: kwhite,
           primaryColor: Colors.blueAccent,
@@ -25,7 +26,7 @@ class StudentApp extends StatelessWidget {
               backgroundColor: kblack,
               centerTitle: true,
               foregroundColor: kwhite,iconTheme: IconThemeData(color: kwhite))),
-      home: ScreenHome(),
+      home: const ScreenHome(),
     );
   }
 }

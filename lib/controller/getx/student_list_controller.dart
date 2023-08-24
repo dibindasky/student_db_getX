@@ -11,8 +11,13 @@ class StudentListController extends GetxController{
     List<Student> tempList=await sql.getData();
         studentList.clear();
          studentList.addAll(
-      tempList.where((model) => model.name.toLowerCase().contains(name.toLowerCase())).toList(),
+      tempList.where((model) => model.name.toLowerCase().contains(name.toLowerCase())).toList().reversed,
     );
+  }
+
+  Future<void> deleteStudent(int id)async{
+   await sql.deleteData(id);
+   await getStudents('');
   }
 
 }

@@ -45,7 +45,6 @@ class Sql with ChangeNotifier {
         await db.rawQuery('SELECT * FROM Student');
     for (var map in list) {
       final student = Student.fromMap(map);
-      print(student.name);
       studentList.add(student);
     }
     return studentList;

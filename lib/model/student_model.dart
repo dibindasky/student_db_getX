@@ -11,7 +11,6 @@ class Student {
       {required this.age, required this.name, required this.phone, this.image,this.id});
 
   static Student fromMap(Map<String, Object?> map) {
-    print('---------------in model creation------------');
     return Student(
       id: map['id']as int,
       name: map['name']as String,

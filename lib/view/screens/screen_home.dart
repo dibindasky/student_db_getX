@@ -8,20 +8,14 @@ import '../../model/student_model.dart';
 import '../widgets/home/list_tile.dart';
 import '../widgets/home/search_textfield.dart';
 
-ValueNotifier<bool> search = ValueNotifier(false);
-String srarchValue = '';
+final listController = Get.put(StudentListController());
+
 
 class ScreenHome extends GetView {
-  ScreenHome({super.key});
-
-  final TextEditingController searchController = TextEditingController();
-  final listController = Get.put<StudentListController>(StudentListController());
+  const ScreenHome({super.key});
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPersistentFrameCallback((timeStamp) async{
-      await listController.getStudents('');
-    });
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: kwhite,
@@ -35,32 +29,28 @@ class ScreenHome extends GetView {
             title: const Text('Students Data'),
             bottom: AppBar(
               title:
-                  SearchBarText(size: size, searchController: searchController),
+                  SearchBarText(size: size),
             ),
           ),
           // Other Sliver Widgets
           SliverList(
             delegate: SliverChildListDelegate([
-              GetX<StudentListController>(
-                builder: (listController) {
-                  return ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: listController.studentList.length,
-                    itemBuilder: (context, index) {
-                      if (listController.studentList.isEmpty) {
-                        return const Center(
-                          child: Text('list is empty'),
-                        );
-                      }
-                      final Student model = listController.studentList[index];
-                      return ListStudentTile(
-                        size: size,
-                        model: model,
-                      );
-                    },
-                  );
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: GetX<StudentListController>(
+                  builder: (listController) {
+                    return ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          final Student model =
+                              listController.studentList[index];
+                          return ListStudentTile(size: size, model: model);
+                        },
+                        separatorBuilder: (context, index) => kheight5,
+                        itemCount: listController.studentList.length);
+                  },
+                ),
               )
             ]),
           ),
@@ -71,11 +61,7 @@ class ScreenHome extends GetView {
         foregroundColor: kwhite,
         onPressed: () {
           clear();
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ScreenDetails(action: ActionType.add),
-              ));
+          Get.to(ScreenDetails(action: ActionType.add));
         },
         label: const Text('Add new'),
       ),

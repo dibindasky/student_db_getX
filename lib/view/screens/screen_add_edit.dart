@@ -84,11 +84,7 @@ class ScreenDetails extends StatelessWidget {
                   kheight20,
                   ElevatedButton.icon(
                     onPressed: () async {
-                      if (formKey.currentState!.validate()) {
-                        await checkStudent();
-                        await listController.getStudents('');
-                        Navigator.pop(context);
-                      }
+                      await addOrUpdate(context);
                     },
                     icon: action == ActionType.add
                         ? const Icon(Icons.check)
@@ -110,6 +106,25 @@ class ScreenDetails extends StatelessWidget {
     );
   }
 
+  Future<void> addOrUpdate(BuildContext context) async {
+     if (formKey.currentState!.validate()) {
+      await checkStudent();
+      await listController.getStudents('');
+      Navigator.pop(context);
+      String message = action == ActionType.add
+          ? 'Added Sucessfully'
+          : 'Updated Sucessfully';
+      Get.snackbar(
+        message,
+        '${nameController.text} $message',
+        colorText: kblack,
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(milliseconds: 1000),
+        backgroundColor: Colors.greenAccent.withOpacity(0.85),
+      );
+    }
+  }
+
   Future<void> pickImage() async {
     XFile? img = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (img != null) {
@@ -119,12 +134,11 @@ class ScreenDetails extends StatelessWidget {
 
   Future<void> checkStudent() async {
     final model = Student(
-      age: ageController.text.trim(),
-      name: nameController.text.trim(),
-      phone: phoneController.text.trim(),
-      image: image,
-      id: this.model ==null ? null : this.model!.id
-    );
+        age: ageController.text.trim(),
+        name: nameController.text.trim(),
+        phone: phoneController.text.trim(),
+        image: image,
+        id: this.model == null ? null : this.model!.id);
     ActionType.edit == action
         ? await sql.updateTable(model)
         : await sql.insertInToDb(model);
